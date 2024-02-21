@@ -1,6 +1,5 @@
 "use strict";
 
-const output = document.querySelector(".output");
 const start = document.querySelector(".start");
 const stop = document.querySelector(".stop");
 const body = document.querySelector("body");
@@ -13,66 +12,93 @@ recognition.lang = "en";
 recognition.interimResults = true;
 recognition.continuous = true;
 
-let latestTranscript = "";
-let isListening = false;
-
 start.addEventListener("click", function () {
   recognition.start();
   console.log("recognition started");
-  isListening = true;
 });
 
+let transcript = Array();
+let name, username, email, password;
+
 recognition.onresult = (e) => {
-  latestTranscript = "";
   for (let i = 0; i < e.results.length; i++) {
-    latestTranscript = e.results[i][0].transcript;
-  }
+    transcript.push(e.results[i][0].transcript);
+    if (e.results[i][0].transcript.includes("register")) {
+      transcript = [];
+      registerModal();
+    }
 
-  output.textContent = latestTranscript;
-  console.log(latestTranscript);
+    if (e.results[i][0].transcript.trim().includes("name")) {
+      transcript = [];
+      name = writeName(e.results[i][0].transcript);
+    }
 
-  setTimeout(function () {
-    latestTranscript = "";
-    console.log("New Latest Transcript");
-    console.log(latestTranscript);
-  }, 3000);
-  checkTranscript(latestTranscript);
-};
+    if (e.results[i][0].transcript.trim().includes("user")) {
+      transcript = [];
+      username = writeUsername(e.results[i][0].transcript);
+    }
 
-let interval;
+    if (e.results[i][0].transcript.trim().includes("email")) {
+      transcript = [];
+      email = writeEmail(e.results[i][0].transcript);
+    }
 
-const checkTranscript = function (transcript) {
-  if (transcript.toLowerCase().includes("keep changing colour")) {
-    startChaningColor();
-  }
+    if (e.results[i][0].transcript.trim().includes("password")) {
+      transcript = [];
+      password = writePassword(e.results[i][0].transcript);
+    }
 
-  if (transcript.toLowerCase().includes("stop changing colour")) {
-    stopChangingColor();
-  }
-};
+    if (e.results[i][0].transcript.trim().includes("display details")) {
+      transcript = [];
+      displayDetails(e.results[i][0].transcript);
+    }
 
-const randomColor = function () {
-  let color = "#";
-  const hex = "0123456789ABCDEF";
-
-  for (let i = 0; i < 6; i++) {
-    color += hex[Math.floor(Math.random() * 16)];
-  }
-  return color;
-};
-
-const startChaningColor = function () {
-  if (!interval) {
-    interval = setInterval(changeBgColor, 500);
-  }
-
-  function changeBgColor() {
-    body.style.backgroundColor = randomColor();
+    transcript.push(e.results[i][0].transcript);
   }
 };
 
-const stopChangingColor = function () {
-  clearInterval(interval);
-  interval = null;
-  body.style.backgroundColor = "white";
+const registerModal = function () {
+  const registerModal = document.querySelector(".register-modal");
+  registerModal.style.opacity = 1;
+  transcript = [];
+};
+
+const writeName = function (name) {
+  const fullName = document.querySelector(".fullname");
+  const nameValue = name.replace("name ", "").trim();
+  fullName.value = nameValue;
+  transcript = [];
+  return nameValue;
+};
+
+const writeUsername = function (inputUsername) {
+  const userName = document.querySelector(".username");
+  const usernameValue = inputUsername.replace("user ", "");
+  userName.value = usernameValue.trim().replace(" ", "");
+  transcript = [];
+  return usernameValue;
+};
+
+const writeEmail = function (inputEmail) {
+  const email = document.querySelector(".email");
+  let emailValue = inputEmail.replace("email ", "");
+  emailValue = emailValue.toLowerCase().trim().replace(" ", "");
+  email.value = emailValue;
+  transcript = [];
+  return emailValue;
+};
+
+const writePassword = function (inputPass) {
+  const password = document.querySelector(".password");
+  const passwordValue = inputPass.replace("password ", "");
+  password.value = passwordValue.trim();
+  transcript = [];
+  return passwordValue;
+};
+
+const displayDetails = function () {
+  console.log("Name: ", name);
+  console.log("Username: ", username);
+  console.log("Email: ", email);
+  console.log("Password: ", password);
 };
