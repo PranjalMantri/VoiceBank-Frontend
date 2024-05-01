@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../style.css" class="css" />
+    <title>VoiceBank - Revolutionizing banking with your voice</title>
+  </head>
+  <body class="h-screen">
+    <!-- navigation bar starts here  -->
+    <nav class="flex justify-between">
+      <div
+        class="font-Montserrat text-2xl font-medium px-10 py-10 text-[#212121] ml-3"
+      >
+        VoiceBank
+      </div>
+      <div>
+        <ul class="flex">
+          <li class="px-4 py-10 text-lg text-[#212121]">Services</li>
+          <li class="px-4 py-10 text-lg text-[#212121]">About</li>
+          <li class="px-4 py-10 text-lg text-[#212121]">How it works</li>
+          <li class="px-6 mr-3 py-7 text-lg text-[#212121]">
+            <button
+              id="start-talking"
+              class="text-white bg-[#EE6043] rounded-xl px-7 p-3"
+            >
+              Let's Talk
+            </button>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Navigation bar ends here  -->
+
+    <!-- hero section start here  -->
+    <main class="mt-10 mx-[10%] w-[80%]">
+      <div class="w-full h-auto flex flex-col items-center">
+        <p
+          class="text-[#212121] font-Montserrat font-bold text-6xl tracking-wide text-center"
+        >
+          Experince the Future of Banking with VoiceBank
+        </p>
+        <div class="mt-8">
+          <div class="flex justify-center items-center">
+            <div class="w-[40%]">
+              <p
+                class="font-Montserrat px-10 text- text-balance text-center text-[#212121]"
+              >
+                Welcome to VoiceBank, the innovative financial services company
+                that brings you banking experience to the next level. Our
+                cutting edge voice-activated bank technology ensures that every
+                interaction is seamless and secure. With our intuitive platform,
+                you can easily manage your accounts and a range of financial
+                services with just your voice. Join us today and experience a
+                new era of banking.
+              </p>
+              <div class="flex justify-center px-10">
+                <button
+                  class="mt-7 px-10 text-white bg-[#EE6043] rounded-xl py-3"
+                  type="button"
+                  id="experience-now--button"
+                >
+                  Experience now
+                </button>
+              </div>
+            </div>
+            <div class="w-[50%]">
+              <img class="rounded-lg" src="../../assets/image2.webp" alt="" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <!-- Hero Section ends here  -->
+
+    <div id="register-modal" class="hidden">
+      <div class="flex justify-center">
+        <div
+          class="w-[100%] fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center backdrop-blur-sm"
+        >
+          <div
+            class="bg-white p-8 rounded shadow-lg w-full max-w-sm text-[#212121] border border-gray-300 relative"
+          >
+            <button
+              id="close-modal"
+              class="absolute top-0 right-0 mt-4 mr-4 text-gray-600 hover:text-gray-800 focus:outline-none"
+            >
+              <svg
+                class="h-6 w-6"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+            <h2 class="text-2xl font-bold mb-4 text-[#212121]">Register</h2>
+            <form>
+              <div class="mb-4">
+                <label
+                  for="fullname"
+                  class="block text-sm font-medium text-gray-700"
+                  >Full Name</label
+                >
+                <input
+                  type="text"
+                  id="fullname"
+                  placeholder="Fullname"
+                  name="fullname"
+                  class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#EE6043] focus:border-[#EE6043] sm:text-sm"
+                  required
+                />
+              </div>
+              <div class="mb-4">
+                <label
+                  for="username"
+                  class="block text-sm font-medium text-gray-700"
+                  >Username</label
+                >
+                <input
+                  type="text"
+                  id="username"
+                  placeholder="Username"
+                  name="username"
+                  class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#EE6043] focus:border-[#EE6043] sm:text-sm"
+                  required
+                />
+              </div>
+              <div class="mb-4">
+                <label
+                  for="email"
+                  class="block text-sm font-medium text-gray-700"
+                  >Email</label
+                >
+                <input
+                  type="email"
+                  id="email"
+                  placeholder="Email"
+                  name="email"
+                  class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#EE6043] focus:border-[#EE6043] sm:text-sm"
+                  required
+                />
+              </div>
+              <div class="mb-4">
+                <label
+                  for="password"
+                  class="block text-sm font-medium text-gray-700"
+                  >Password</label
+                >
+                <input
+                  type="password"
+                  id="password"
+                  placeholder="Password"
+                  name="password"
+                  class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#EE6043] focus:border-[#EE6043] sm:text-sm"
+                  required
+                />
+              </div>
+
+              <div class="text-center mb-4">
+                <div>
+                  <p class="text-gray-700 text-sm">
+                    Already have an account?
+                    <a href="#" class="text-[#EE6043]">Login</a>
+                  </p>
+                </div>
+                <button
+                  type="submit"
+                  id="register"
+                  class="mt-2 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-[#EE6043] hover:bg-[#EE6043] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#EE6043]"
+                >
+                  Register
+                </button>
+              </div>
+              <!-- <p class="text-gray-700 text-sm">
+                Already have an account?
+                <a href="#" class="text-[#EE6043]">Login</a>
+              </p> -->
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Services we provide section starts here  -->
+    <article class="flex flex-col items-center px-5">
+      <div class="mt-14 mx-[15%] w-[70%]">
+        <p
+          class="text-[#212121] font-Montserrat font-bold text-3xl tracking-wide"
+        >
+          Services we provide
+        </p>
+        <div class="grid grid-cols-2 items-center">
+          <div class="w-[90%] text-wrap mt-12">
+            <div class="ml-3 bg-neutral-200 p-6 rounded-xl">
+              <p class="font-bold font-Montserrat text-[#212121] text-2xl mb-2">
+                Voice Activated Banking
+              </p>
+              <p class="font-Montserrat text-[#212121]">
+                Conduct banking transactions using simple voice commands,
+                enjoying a seamless, secure and convenient banking experience
+                with VoiceBank's voice activate banking feature.
+              </p>
+            </div>
+          </div>
+
+          <div class="w-[90%] text-wrap mt-12">
+            <div class="ml-3 bg-neutral-200 p-6 rounded-xl">
+              <p class="font-bold font-Montserrat text-[#212121] text-2xl mb-2">
+                Loan Application Service
+              </p>
+              <p class="font-Montserrat text-[#212121]">
+                At VoiceBank, we understand that financial needs can arise
+                unexpectedly. That's why we've made it easy and convenient for
+                you to apply for a loan online so that you get the financial
+                assistance you need.
+              </p>
+            </div>
+          </div>
+
+          <div class="w-[90%] text-wrap mt-12">
+            <div class="ml-3 bg-neutral-200 p-6 rounded-xl">
+              <p class="font-bold font-Montserrat text-[#212121] text-2xl mb-2">
+                Seamless fund transfer
+              </p>
+              <p class="font-Montserrat text-[#212121]">
+                Transfer funds efficiently between you accounts or to other
+                people just by speaking with VoiceBank's AI powered transaction
+                feature.
+              </p>
+            </div>
+          </div>
+
+          <div class="w-[90%] text-wrap mt-12">
+            <div class="ml-3 bg-neutral-200 p-6 rounded-xl">
+              <p class="font-bold font-Montserrat text-[#212121] text-2xl mb-2">
+                Secure Account Management
+              </p>
+              <p class="font-Montserrat text-[#212121]">
+                At voicebank, we prioritze the safety and security of your
+                account, providing you with a secure and reliable account
+                management experience.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+    <!-- Services we provide section ends here  -->
+
+    <!-- More about product section start here  -->
+
+    <div class="mt-20 mx-[15%] w-[70%] bg-[#EE6043]/[0.09]">
+      <div class="flex justify-center items-center">
+        <div class="w-[40%] p-5">
+          <p
+            class="text-wrap font-bold font-Montserrat text-3xl text-[#212121]"
+          >
+            VoiceBank: The Future of Banking
+          </p>
+          <p class="text-[#212121] mt-4">
+            Discover how VoiceBank revolutionizes the banking experience,
+            providing users with a secure user-friendly platform for conducting
+            financial transactions using voice commands
+          </p>
+          <div>
+            <ul class="mt-2">
+              <li class="flex items-center space-x-2 rtl:space-x-reverse">
+                <svg
+                  class="w-4 h-4 text-gray-800 dark:-[#212121]"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M10.271 5.575C8.967 4.501 7 5.43 7 7.12v9.762c0 1.69 1.967 2.618 3.271 1.544l5.927-4.881a2 2 0 0 0 0-3.088l-5.927-4.88Z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+
+                <span class="text-[#212121]"
+                  >Cutting edge voice-activated banking</span
+                >
+              </li>
+              <li class="flex items-center space-x-2 rtl:space-x-reverse">
+                <svg
+                  class="w-4 h-4 text-gray-800 dark:-[#212121]"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M10.271 5.575C8.967 4.501 7 5.43 7 7.12v9.762c0 1.69 1.967 2.618 3.271 1.544l5.927-4.881a2 2 0 0 0 0-3.088l-5.927-4.88Z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+
+                <span class="text-[#212121]">AI-powered transactions</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="w-[40%] p-5">
+          <img class="rounded-xl" src="../../assets/image1.webp" alt="" />
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-20 mx-[15%] w-[70%] bg-[#EE6043]/[0.09]">
+      <div class="flex flex-row-reverse justify-center items-center">
+        <div class="w-[40%] p-5">
+          <p
+            class="text-wrap font-bold font-Montserrat text-3xl text-[#212121]"
+          >
+            VoiceBank: Redefining Financial Accessibility
+          </p>
+          <p class="text-[#212121] mt-4">
+            Learn how VoiceBank is making Banking more accessible to visually
+            impaired, providing them with a platform to manage their finances
+            independently and with ease
+          </p>
+          <div>
+            <ul class="mt-2">
+              <li class="flex items-center space-x-2 rtl:space-x-reverse">
+                <svg
+                  class="w-4 h-4 text-gray-800 dark:-[#212121]"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M10.271 5.575C8.967 4.501 7 5.43 7 7.12v9.762c0 1.69 1.967 2.618 3.271 1.544l5.927-4.881a2 2 0 0 0 0-3.088l-5.927-4.88Z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+
+                <span class="text-[#212121]"
+                  >User-friendly interface for visually impaired</span
+                >
+              </li>
+              <li class="flex items-center space-x-2 rtl:space-x-reverse">
+                <svg
+                  class="w-4 h-4 text-gray-800 dark:-[#212121]"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M10.271 5.575C8.967 4.501 7 5.43 7 7.12v9.762c0 1.69 1.967 2.618 3.271 1.544l5.927-4.881a2 2 0 0 0 0-3.088l-5.927-4.88Z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+
+                <span class="text-[#212121]">24/7 Customer Support </span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="w-[40%] p-5">
+          <img class="rounded-xl" src="../../assets/image3.webp" alt="" />
+        </div>
+      </div>
+    </div>
+    <!-- More about product section ends here  -->
+
+    <!-- How it works section starts here -->
+    <article class="flex flex-row items-center px-5">
+      <div class="mt-14 mx-[15%] w-[70%]">
+        <p
+          class="text-[#212121] font-Montserrat font-bold text-3xl tracking-wide"
+        >
+          How it works
+        </p>
+
+        <div class="flex flex-wrap justify-center">
+          <div class="w-[30%] text-wrap mt-12">
+            <div
+              class="flex flex-col items-center ml-3 bg-neutral-100 p-6 rounded-xl"
+            >
+              <div
+                class="h-[50px] w-[20%] rounded-full bg-[#EE6043] flex items-center justify-center"
+              >
+                <p class="text-white font-bold font-Montserrat">1</p>
+              </div>
+              <div>
+                <p
+                  class="mt-8 font-bold font-Montserrat text-[#212121] text-xl mb-2"
+                >
+                  Enable Microphone
+                </p>
+                <p class="font-Montserrat text-[#212121]">
+                  Ensure your device's microphone is enabled and that our app
+                  has permission to access it.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="w-[30%] text-wrap mt-12">
+            <div
+              class="flex flex-col items-center ml-3 bg-neutral-100 p-6 rounded-xl"
+            >
+              <div
+                class="h-[50px] w-[20%] rounded-full bg-[#EE6043] flex items-center justify-center"
+              >
+                <p class="text-white font-bold font-Montserrat">2</p>
+              </div>
+              <div>
+                <p
+                  class="mt-8 font-bold font-Montserrat text-[#212121] text-xl mb-2"
+                >
+                  Activate Voice Commands
+                </p>
+                <p class="font-Montserrat text-[#212121]">
+                  Look for the "Let's Talk" button in the website and click on
+                  it to activate voice commands
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="w-[30%] text-wrap mt-12">
+            <div
+              class="flex flex-col items-center ml-3 bg-neutral-100 p-6 rounded-xl"
+            >
+              <div
+                class="h-[50px] w-[20%] rounded-full bg-[#EE6043] flex items-center justify-center"
+              >
+                <p class="text-white font-bold font-Montserrat">3</p>
+              </div>
+              <div>
+                <p
+                  class="mt-8 font-bold font-Montserrat text-[#212121] text-xl mb-2"
+                >
+                  Speak Clearly
+                </p>
+                <p class="font-Montserrat text-[#212121]">
+                  Use commands like "Send money to [Person]" or "Create Account"
+                  and speak clearly.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+    <!-- How it works section ends here  -->
+  </body>
+  <script src="../js/index.js"></script>
+</html>
+
+<!-- 
+  <div id="register-modal" class="hidden">
+      <div class="flex justify-center">
+        <div
+          class="w-[100%] fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center backdrop-blur-sm"
+        >
+          <div
+            class="bg-white p-8 rounded shadow-lg w-full max-w-sm text-[#212121]"
+          >
+            <h2 class="text-2xl font-bold mb-4 text-[#212121]">Register</h2>
+            <form>
+              <div class="mb-4">
+                <label
+                  for="fullname"
+                  class="block text-sm font-medium text-gray-700"
+                  >Full Name</label
+                >
+                <input
+                  type="text"
+                  id="fullname"
+                  placeholder="Fullname"
+                  name="fullname"
+                  class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#EE6043] focus:border-[#EE6043] sm:text-sm"
+                  required
+                />
+              </div>
+              <div class="mb-4">
+                <label
+                  for="username"
+                  class="block text-sm font-medium text-gray-700"
+                  >Username</label
+                >
+                <input
+                  type="text"
+                  id="username"
+                  placeholder="Username"
+                  name="username"
+                  class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#EE6043] focus:border-[#EE6043] sm:text-sm"
+                  required
+                />
+              </div>
+              <div class="mb-4">
+                <label
+                  for="email"
+                  class="block text-sm font-medium text-gray-700"
+                  >Email</label
+                >
+                <input
+                  type="email"
+                  id="email"
+                  placeholder="Email"
+                  name="email"
+                  class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#EE6043] focus:border-[#EE6043] sm:text-sm"
+                  required
+                />
+              </div>
+              <div class="mb-4">
+                <label
+                  for="password"
+                  class="block text-sm font-medium text-gray-700"
+                  >Password</label
+                >
+                <input
+                  type="password"
+                  id="password"
+                  placeholder="Password"
+                  name="password"
+                  class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#EE6043] focus:border-[#EE6043] sm:text-sm"
+                  required
+                />
+              </div>
+              <div class="flex justify-end">
+                <button
+                  type="submit"
+                  id="register"
+                  class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-[#EE6043] hover:bg-[#EE6043] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#EE6043]"
+                >
+                  Register
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+ -->
