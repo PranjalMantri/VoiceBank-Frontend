@@ -11,10 +11,16 @@
       <div class="container mx-auto py-8">
         <!-- Header -->
         <div class="flex justify-between items-center mb-8 px-10">
-          <h1 class="text-3xl font-bold text-gray-800">Welcome, John Doe</h1>
+          <h1 class="text-3xl font-bold text-gray-800">
+            Welcome, <span id="username">John Doe</span>
+          </h1>
           <div>
-            <p class="text-gray-600">Account Number: 1234567890</p>
-            <p class="text-gray-600">Balance: $5,000.00</p>
+            <p class="text-gray-600">
+              Account Number: <span id="account-number">1234567890</span>
+            </p>
+            <p class="text-gray-600">
+              Balance: <span id="balance">$5,000.00</span>
+            </p>
           </div>
         </div>
 
@@ -76,5 +82,97 @@
         </div>
       </div>
     </div>
+
+    <div id="account-modal" class="hidden">
+      <div class="flex justify-center">
+        <div
+          class="w-[100%] fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center backdrop-blur-sm"
+        >
+          <div
+            class="bg-white p-8 rounded shadow-lg w-full max-w-sm text-[#212121] border border-gray-300 relative"
+          >
+            <button
+              id="close-modal"
+              class="absolute top-0 right-0 mt-4 mr-4 text-gray-600 hover:text-gray-800 focus:outline-none"
+            >
+              <svg
+                class="h-6 w-6"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+            <h2 class="text-2xl font-bold mb-4 text-[#212121]">
+              Create Account
+            </h2>
+            <form>
+              <div class="mb-4">
+                <label
+                  for="account-type"
+                  class="block text-sm font-medium text-gray-700"
+                  >Account Type</label
+                >
+                <select
+                  id="account-type-select"
+                  name="email"
+                  class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#EE6043] focus:border-[#EE6043] sm:text-sm"
+                  required
+                >
+                  <option value="salary" class="text-[#212121] font-Montserrat">
+                    Salary
+                  </option>
+                  <option
+                    value="savings"
+                    class="text-[#212121] font-Montserrat"
+                  >
+                    Savings
+                  </option>
+                  <option
+                    value="current"
+                    class="text-[#212121] font-Montserrat"
+                  >
+                    Current
+                  </option>
+                </select>
+              </div>
+              <div class="mb-4">
+                <label
+                  for="password"
+                  class="block text-sm font-medium text-gray-700"
+                  >Set Pin</label
+                >
+                <input
+                  type="password"
+                  id="pin"
+                  placeholder="Pin"
+                  name="password"
+                  class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#EE6043] focus:border-[#EE6043] sm:text-sm"
+                  required
+                />
+              </div>
+
+              <div class="text-center mb-4">
+                <button
+                  type="submit"
+                  id="login"
+                  class="mt-2 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-[#EE6043] hover:bg-[#EE6043] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#EE6043]"
+                >
+                  Create Account
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="../js/account.js"></script>
   </body>
 </html>

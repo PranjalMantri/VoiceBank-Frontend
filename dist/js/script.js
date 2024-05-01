@@ -250,6 +250,8 @@ const loginUser = async function () {
     const data = await response.json();
 
     if (data.success) {
+      const userId = data["data"]["user"]["_id"];
+      localStorage.setItem("userId", JSON.stringify(userId));
       closeLoginModal();
       window.location.href = "./account.html";
     }
