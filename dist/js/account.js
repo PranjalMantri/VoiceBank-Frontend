@@ -8,20 +8,19 @@ recognition.lang = "en";
 recognition.interimResults = true;
 recognition.continuous = true;
 
-window.onload = async function () {
-  recognition.start();
-  await findUserAccount(userId);
-  await findUser(userId);
-  updateUserDetails();
-};
-
 let transcript = Array();
 let accountType, pin;
 const userId = localStorage.getItem("userId").replaceAll(`"`, "");
 const accountModal = document.querySelector("#account-modal");
 const errorModal = document.querySelector("#error-modal");
+const depositModal = document.querySelector("#deposit-modal");
+const withdrawModal = document.querySelector("#withdraw-modal");
+const transferModal = document.querySelector("#transfer-modal");
 
 let accountNumber, balance, transactions, username;
+let amount, transactionPin, transferAccount, action;
+
+action = "Account";
 
 const findUserAccount = async function (userId) {
   const response = await fetch(
@@ -86,12 +85,43 @@ function showErrorModal() {
 function closeErrorModal() {
   errorModal.classList.add("hidden");
 }
+
 const showAccountModal = function () {
   accountModal.classList.remove("hidden");
 };
 
 const closeAccountModal = function () {
   accountModal.classList.add("hidden");
+};
+
+const showDepositModal = function () {
+  closeWithdrawModal();
+  closeTransferModal();
+  depositModal.classList.remove("hidden");
+};
+
+const closeDepositModal = function () {
+  depositModal.classList.add("hidden");
+};
+
+const showWithdrawModal = function () {
+  closeDepositModal();
+  closeTransferModal();
+  withdrawModal.classList.remove("hidden");
+};
+
+const closeWithdrawModal = function () {
+  withdrawModal.classList.add("hidden");
+};
+
+const showTransferModal = function () {
+  closeWithdrawModal();
+  closeDepositModal();
+  transferModal.classList.remove("hidden");
+};
+
+const closeTransferModal = function () {
+  transferModal.classList.add("hidden");
 };
 
 recognition.onresult = (e) => {
@@ -105,15 +135,48 @@ recognition.onresult = (e) => {
     else if (e.results[i][0].transcript.trim().includes("type")) {
       transcript = [];
       accountType = writeAccountType(e.results[i][0].transcript);
-    } // Input username
-    else if (e.results[i][0].transcript.trim().includes("pin")) {
+    } else if (e.results[i][0].transcript.trim().includes("deposit")) {
+      action = "deposit";
       transcript = [];
-      pin = writePin(e.results[i][0].transcript).trim();
+      showDepositModal();
+    } else if (e.results[i][0].transcript.trim().includes("withdraw")) {
+      action = "withdraw";
+      transcript = [];
+      showWithdrawModal();
+    } else if (e.results[i][0].transcript.trim().includes("transfer")) {
+      action = "transfer";
+      transcript = [];
+      showTransferModal();
+    } else if (e.results[i][0].transcript.trim().includes("amount")) {
+      transcript = [];
+      amount = writeAmount(e.results[i][0].transcript);
+    } else if (e.results[i][0].transcript.trim().includes("pin")) {
+      console.log("Pin was said");
+      transcript = [];
+      transactionPin = writePin(e.results[i][0].transcript);
+    } else if (e.results[i][0].transcript.trim().includes("transfer account")) {
+      transcript = [];
+      transferAccount = writeTransferAccount(e.results[i][0].transcript);
+    } else if (e.results[i][0].transcript.trim().includes("close")) {
+      console.log("Close was said");
+      transcript = [];
+      closeAccountModal();
+      closeDepositModal();
+      closeErrorModal();
+      closeWithdrawModal();
+      closeTransferModal();
     } else if (e.results[i][0].transcript.trim().includes("submit")) {
       transcript = [];
-      debouncedCreateAccount();
+      if (action === "Account") {
+        debouncedCreateAccount();
+      } else if (action === "deposit") {
+        console.log("deposit");
+      } else if (action === "withdraw") {
+        console.log("withdraw");
+      } else if (action === "transfer") {
+        console.log("transfer");
+      }
     }
-
     transcript.push(e.results[i][0].transcript);
   }
 };
@@ -140,9 +203,35 @@ const writeAccountType = function (inputAccountType) {
 const writePin = function (inputPin) {
   const pin = document.querySelector("#pin");
   const pinValue = inputPin.trim().replaceAll(" ", "").replaceAll("pin", "");
-  pin.value = pinValue;
+  console.log("Real", pinValue);
+  console.log("Display", pin.value);
   transcript = [];
+  pin.value = pinValue;
   return pinValue;
+};
+
+const writeAmount = function (inputAmount) {
+  const amount = document.querySelector("#amount");
+  const amountValue = inputAmount
+    .trim()
+    .toLowerCase()
+    .replaceAll(" ", "")
+    .replaceAll("amount", "");
+  amount.value = amountValue;
+  transcript = [];
+  return amountValue;
+};
+
+const writeTransferAccount = function (inputAccount) {
+  const account = document.querySelector("#trasnfer-to");
+  const accountValue = inputAccount
+    .trim()
+    .toLowerCase()
+    .replaceAll(" ", "")
+    .replaceAll("transfer account", "");
+  account.value = accountValue;
+  transcript = [];
+  return accountValue;
 };
 
 const createAccount = async function () {
@@ -187,3 +276,10 @@ function debounce(func, delay) {
 }
 
 const debouncedCreateAccount = debounce(createAccount, 2000);
+
+window.onload = async function () {
+  recognition.start();
+  await findUserAccount(userId);
+  await findUser(userId);
+  updateUserDetails();
+};
