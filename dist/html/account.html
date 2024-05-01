@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="../style.css" />
+  </head>
+  <body>
+    <div class="min-h-screen bg-gray-100">
+      <div class="container mx-auto py-8">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-8 px-10">
+          <h1 class="text-3xl font-bold text-gray-800">Welcome, John Doe</h1>
+          <div>
+            <p class="text-gray-600">Account Number: 1234567890</p>
+            <p class="text-gray-600">Balance: $5,000.00</p>
+          </div>
+        </div>
+
+        <!-- Transaction History -->
+        <div
+          class="w-[70%] flex justify-center bg-white shadow-md rounded-lg mb-8"
+        >
+          <div class="px-6 py-4">
+            <h2 class="text-xl font-semibold mb-4 text-gray-800">
+              Transaction History
+            </h2>
+            <table class="w-full table-auto">
+              <thead>
+                <tr class="bg-gray-200">
+                  <th class="px-4 py-2 text-gray-800">Date</th>
+                  <th class="px-4 py-2 text-gray-800">Description</th>
+                  <th class="px-4 py-2 text-gray-800">Type</th>
+                  <th class="px-4 py-2 text-gray-800">Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="border px-4 py-2 text-gray-700">04/30/2024</td>
+                  <td class="border px-4 py-2 text-gray-700">
+                    Grocery Shopping
+                  </td>
+                  <td class="border px-4 py-2 text-gray-700">Withdrawal</td>
+                  <td class="border px-4 py-2 text-red-600">-$150.00</td>
+                </tr>
+                <tr>
+                  <td class="border px-4 py-2 text-gray-700">04/28/2024</td>
+                  <td class="border px-4 py-2 text-gray-700">Salary</td>
+                  <td class="border px-4 py-2 text-gray-700">Deposit</td>
+                  <td class="border px-4 py-2 text-green-600">+$3,000.00</td>
+                </tr>
+                <!-- Add more transactions here -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex justify-center">
+          <button
+            class="bg-red-600 text-white py-2 px-4 rounded-lg shadow-md hover:bg-red-700 transition-colors duration-300 mr-2"
+          >
+            Deposit
+          </button>
+          <button
+            class="bg-gray-800 text-white py-2 px-4 rounded-lg shadow-md hover:bg-gray-700 transition-colors duration-300 mr-2"
+          >
+            Withdraw
+          </button>
+          <button
+            class="bg-blue-500 text-white py-2 px-4 rounded-lg shadow-md hover:bg-blue-600 transition-colors duration-300"
+          >
+            Transfer
+          </button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
