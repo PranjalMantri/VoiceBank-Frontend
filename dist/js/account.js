@@ -11,33 +11,31 @@ recognition.continuous = true;
 window.onload = async function () {
   recognition.start();
   await findUserAccount(userId);
+  await findUser(userId);
   updateUserDetails();
 };
 
 let transcript = Array();
 let accountType, pin;
-const userId = localStorage.getItem("userId");
+const userId = localStorage.getItem("userId").replaceAll(`"`, "");
 const accountModal = document.querySelector("#account-modal");
-console.log(userId);
+const errorModal = document.querySelector("#error-modal");
 
-let accountNumber, balance, transactions;
+let accountNumber, balance, transactions, username;
 
 const findUserAccount = async function (userId) {
   const response = await fetch(
-    "http://localhost:8000/api/v1/user/a/6632943ac3c1220d2a8d649a",
+    `http://localhost:8000/api/v1/user/a/${userId}`,
     {
       credentials: "include",
     }
   );
 
   const data = await response.json();
-  console.log(data["data"].length);
   if (data.success) {
     if (data["data"].length == 0) {
-      console.log("User does not have any accounts");
       showAccountModal();
     } else {
-      console.log("User has an account");
       accountNumber = data["data"][0].accountNumber;
       balance = data["data"][0].balance;
       transactions = data["data"][0].transactions;
@@ -45,24 +43,44 @@ const findUserAccount = async function (userId) {
   }
 };
 
+const findUser = async function (userId) {
+  const response = await fetch(`http://localhost:8000/api/v1/user/${userId}`, {
+    credentials: "include",
+  });
+
+  const data = await response.json();
+
+  username = data["data"].username;
+};
+
 const getUserDetails = function () {
-  return { accountNumber, balance, transactions };
+  return { accountNumber, balance, username, transactions };
 };
 
 const updateUserDetails = function () {
-  const { accountNumber, balance, transactions } = getUserDetails();
+  const { accountNumber, balance, username, transactions } = getUserDetails();
+
+  if (transactions.length == 0) {
+    const transactionTable = document.querySelector("#transaction-table");
+    transactionTable.classList.add("hidden");
+
+    const noTransactionMessage = document.querySelector("#no-transaction-msg");
+    noTransactionMessage.classList.remove("hidden");
+  }
 
   const displayAccountNumber = (document.querySelector(
     "#account-number"
   ).textContent = accountNumber);
   const displayBalance = (document.querySelector("#balance").textContent =
     balance);
+
+  const displayUsername = (document.querySelector("#username").textContent =
+    username);
 };
 
 function showErrorModal() {
   errorModal.classList.remove("hidden");
-  closeLoginModal();
-  closeRegisterModal();
+  closeAccountModal();
 }
 
 function closeErrorModal() {
@@ -146,15 +164,15 @@ const createAccount = async function () {
     const data = await response.json();
 
     if (data.success) {
-      accountNumber = data["data"][0].accountNumber;
-      balance = data["data"][0].balance;
-      transactions = data["data"][0].transactions;
-      updateUserDetails();
+      accountNumber = data["data"].accountNumber;
+      balance = data["data"].balance;
+      transactions = data["data"].transactions;
       closeAccountModal();
     }
   } catch (error) {
     showErrorModal();
   }
+  updateUserDetails();
 };
 
 function debounce(func, delay) {
