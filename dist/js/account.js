@@ -78,11 +78,6 @@ const updateUserDetails = async function () {
       const { amount, type, toAccount, createdAt } =
         await getTransactionDetails(transaction);
 
-      // console.log(amount);
-      // console.log(type);
-      // console.log(toAccount);
-      // console.log(createdAt);
-
       const newRow = document.createElement("tr");
 
       const dateCell = document.createElement("td");
@@ -98,12 +93,12 @@ const updateUserDetails = async function () {
       typeCell.textContent = type;
 
       const amountCell = document.createElement("td");
-      if (amount > 0) {
-        amountCell.classList.add("border", "px-4", "py-2", "text-green-600");
-        amountCell.textContent = `₹${amount}`;
-      } else {
+      if (type === "Withdrawl") {
         amountCell.classList.add("border", "px-4", "py-2", "text-red-600");
         amountCell.textContent = `-₹${amount}`;
+      } else {
+        amountCell.classList.add("border", "px-4", "py-2", "text-green-600");
+        amountCell.textContent = `₹${amount}`;
       }
 
       // Append cells to the row
@@ -260,6 +255,7 @@ recognition.onresult = (e) => {
         debouncedCreateDeposit();
       } else if (action === "withdraw") {
         console.log("withdraw");
+        debouncedCreateWithdrawal();
       } else if (action === "transfer") {
         console.log("transfer");
       }
@@ -303,6 +299,14 @@ const writeDepositPin = function (inputPin) {
   return pinValue;
 };
 
+const writeWithdrawPin = function (inputPin) {
+  const pin = document.querySelector("#withdraw-pin");
+  const pinValue = inputPin.trim().replaceAll(" ", "").replaceAll("pin", "");
+  transcript = [];
+  pin.value = pinValue;
+  return pinValue;
+};
+
 const writeAmount = function (inputAmount) {
   const amount = document.querySelector("#amount");
   const amountValue = inputAmount
@@ -317,6 +321,18 @@ const writeAmount = function (inputAmount) {
 
 const writeDepositAmount = function (inputAmount) {
   const amount = document.querySelector("#deposit-amount");
+  const amountValue = inputAmount
+    .trim()
+    .toLowerCase()
+    .replaceAll(" ", "")
+    .replaceAll("amount", "");
+  amount.value = amountValue;
+  transcript = [];
+  return amountValue;
+};
+
+const writeWithdrawAmount = function (inputAmount) {
+  const amount = document.querySelector("#withdraw-amount");
   const amountValue = inputAmount
     .trim()
     .toLowerCase()
@@ -402,6 +418,39 @@ const createDeposit = async function () {
   updateUserDetails();
 };
 
+const createWithdrawal = async function () {
+  const transaction = {
+    amount,
+    pin: transactionPin,
+  };
+
+  console.log(transaction);
+  const response = await fetch(
+    "http://localhost:8000/api/v1/transaction/withdrawl",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(transaction),
+      credentials: "include",
+    }
+  );
+
+  try {
+    const data = await response.json();
+
+    console.log(data);
+    if (data.success) {
+      console.log("Successfuly");
+      closeWithdrawModal();
+    }
+  } catch (error) {
+    showErrorModal();
+  }
+  updateUserDetails();
+};
+
 function debounce(func, delay) {
   let timeoutId;
 
@@ -415,6 +464,7 @@ function debounce(func, delay) {
 
 const debouncedCreateAccount = debounce(createAccount, 2000);
 const debouncedCreateDeposit = debounce(createDeposit, 2000);
+const debouncedCreateWithdrawal = debounce(createWithdrawal, 2000);
 const debouncedGetTransactionDetails = debounce(getTransactionDetails, 1000);
 
 window.onload = async function () {
