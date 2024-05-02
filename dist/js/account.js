@@ -20,7 +20,7 @@ const transferModal = document.querySelector("#transfer-modal");
 let accountNumber, balance, transactions, username;
 let amount, transactionPin, transferAccount, action;
 
-action = "Account";
+action = "account";
 
 const findUserAccount = async function (userId) {
   const response = await fetch(
@@ -56,7 +56,7 @@ const getUserDetails = function () {
   return { accountNumber, balance, username, transactions };
 };
 
-const updateUserDetails = function () {
+const updateUserDetails = async function () {
   const { accountNumber, balance, username, transactions } = getUserDetails();
 
   if (transactions.length == 0) {
@@ -65,6 +65,55 @@ const updateUserDetails = function () {
 
     const noTransactionMessage = document.querySelector("#no-transaction-msg");
     noTransactionMessage.classList.remove("hidden");
+  } else {
+    const tableHeading = document.querySelector("#table-headings");
+    tableHeading.classList.remove("hidden");
+
+    const transactionTableBody = document.querySelector(
+      "#transaction-table tbody"
+    );
+    transactionTableBody.innerHTML = "";
+
+    for (const transaction of transactions) {
+      const { amount, type, toAccount, createdAt } =
+        await getTransactionDetails(transaction);
+
+      // console.log(amount);
+      // console.log(type);
+      // console.log(toAccount);
+      // console.log(createdAt);
+
+      const newRow = document.createElement("tr");
+
+      const dateCell = document.createElement("td");
+      dateCell.classList.add("border", "px-4", "py-2", "text-gray-700");
+      const date = new Date(createdAt);
+      const formattedDate = `${date.getFullYear()}-${(date.getMonth() + 1)
+        .toString()
+        .padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
+      dateCell.textContent = formattedDate;
+
+      const typeCell = document.createElement("td");
+      typeCell.classList.add("border", "px-4", "py-2", "text-gray-700");
+      typeCell.textContent = type;
+
+      const amountCell = document.createElement("td");
+      if (amount > 0) {
+        amountCell.classList.add("border", "px-4", "py-2", "text-green-600");
+        amountCell.textContent = `₹${amount}`;
+      } else {
+        amountCell.classList.add("border", "px-4", "py-2", "text-red-600");
+        amountCell.textContent = `-₹${amount}`;
+      }
+
+      // Append cells to the row
+      newRow.appendChild(dateCell);
+      newRow.appendChild(typeCell);
+      newRow.appendChild(amountCell);
+
+      // Append row to the table body
+      transactionTableBody.appendChild(newRow);
+    }
   }
 
   const displayAccountNumber = (document.querySelector(
@@ -75,6 +124,30 @@ const updateUserDetails = function () {
 
   const displayUsername = (document.querySelector("#username").textContent =
     username);
+};
+
+const getTransactionDetails = async function (transcationId) {
+  const response = await fetch(
+    `http://localhost:8000/api/v1/transaction/${transcationId}`,
+    {
+      credentials: "include",
+    }
+  );
+
+  const data = await response.json();
+  console.log(data);
+  if (data.success) {
+    const amount = data["data"].amount;
+    const type = data["data"].type;
+    const toAccount = data["data"].toAccount;
+    const createdAt = data["data"].createdAt;
+
+    return { amount, type, toAccount, createdAt };
+  } else {
+    // accountNumber = data["data"][0].accountNumber;
+    // balance = data["data"][0].balance;
+    // transactions = data["data"][0].transactions;
+  }
 };
 
 function showErrorModal() {
@@ -149,11 +222,24 @@ recognition.onresult = (e) => {
       showTransferModal();
     } else if (e.results[i][0].transcript.trim().includes("amount")) {
       transcript = [];
-      amount = writeAmount(e.results[i][0].transcript);
+      if (action === "deposit") {
+        amount = writeDepositAmount(e.results[i][0].transcript);
+      } else if (action === "withdraw") {
+        amount = writeWithdrawAmount(e.results[i][0].transcript);
+      } else if (action === "transfer") {
+        amount = writeTransferAmount(e.results[i][0].transcript);
+      }
     } else if (e.results[i][0].transcript.trim().includes("pin")) {
-      console.log("Pin was said");
       transcript = [];
-      transactionPin = writePin(e.results[i][0].transcript);
+      if (action === "account") {
+        transactionPin = writeAccountPin(e.results[i][0].transcript);
+      } else if (action === "deposit") {
+        transactionPin = writeDepositPin(e.results[i][0].transcript);
+      } else if (action === "withdraw") {
+        transactionPin = writeWithdrawPin(e.results[i][0].transcript);
+      } else if (action === "transfer") {
+        transactionPin = writeTransferPin(e.results[i][0].transcript);
+      }
     } else if (e.results[i][0].transcript.trim().includes("transfer account")) {
       transcript = [];
       transferAccount = writeTransferAccount(e.results[i][0].transcript);
@@ -167,10 +253,11 @@ recognition.onresult = (e) => {
       closeTransferModal();
     } else if (e.results[i][0].transcript.trim().includes("submit")) {
       transcript = [];
-      if (action === "Account") {
+      if (action === "account") {
         debouncedCreateAccount();
       } else if (action === "deposit") {
         console.log("deposit");
+        debouncedCreateDeposit();
       } else if (action === "withdraw") {
         console.log("withdraw");
       } else if (action === "transfer") {
@@ -200,11 +287,17 @@ const writeAccountType = function (inputAccountType) {
   return accountType.value;
 };
 
-const writePin = function (inputPin) {
-  const pin = document.querySelector("#pin");
+const writeAccountPin = function (inputPin) {
+  const pin = document.querySelector("#account-pin");
   const pinValue = inputPin.trim().replaceAll(" ", "").replaceAll("pin", "");
-  console.log("Real", pinValue);
-  console.log("Display", pin.value);
+  transcript = [];
+  pin.value = pinValue;
+  return pinValue;
+};
+
+const writeDepositPin = function (inputPin) {
+  const pin = document.querySelector("#deposit-pin");
+  const pinValue = inputPin.trim().replaceAll(" ", "").replaceAll("pin", "");
   transcript = [];
   pin.value = pinValue;
   return pinValue;
@@ -212,6 +305,18 @@ const writePin = function (inputPin) {
 
 const writeAmount = function (inputAmount) {
   const amount = document.querySelector("#amount");
+  const amountValue = inputAmount
+    .trim()
+    .toLowerCase()
+    .replaceAll(" ", "")
+    .replaceAll("amount", "");
+  amount.value = amountValue;
+  transcript = [];
+  return amountValue;
+};
+
+const writeDepositAmount = function (inputAmount) {
+  const amount = document.querySelector("#deposit-amount");
   const amountValue = inputAmount
     .trim()
     .toLowerCase()
@@ -237,7 +342,7 @@ const writeTransferAccount = function (inputAccount) {
 const createAccount = async function () {
   const account = {
     accountType,
-    pin,
+    pin: transactionPin,
   };
 
   const response = await fetch("http://localhost:8000/api/v1/account/create", {
@@ -264,6 +369,39 @@ const createAccount = async function () {
   updateUserDetails();
 };
 
+const createDeposit = async function () {
+  const transaction = {
+    amount,
+    pin: transactionPin,
+  };
+
+  console.log(transaction);
+  const response = await fetch(
+    "http://localhost:8000/api/v1/transaction/deposit",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(transaction),
+      credentials: "include",
+    }
+  );
+
+  try {
+    const data = await response.json();
+
+    console.log(data);
+    if (data.success) {
+      console.log("Successfuly");
+      closeDepositModal();
+    }
+  } catch (error) {
+    showErrorModal();
+  }
+  updateUserDetails();
+};
+
 function debounce(func, delay) {
   let timeoutId;
 
@@ -276,6 +414,8 @@ function debounce(func, delay) {
 }
 
 const debouncedCreateAccount = debounce(createAccount, 2000);
+const debouncedCreateDeposit = debounce(createDeposit, 2000);
+const debouncedGetTransactionDetails = debounce(getTransactionDetails, 1000);
 
 window.onload = async function () {
   recognition.start();

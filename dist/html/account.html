@@ -34,7 +34,7 @@
                 Transaction History
               </h2>
               <table id="transaction-table" class="w-full table-auto">
-                <thead>
+                <thead class="hidden" id="table-headings">
                   <tr class="bg-gray-200">
                     <th class="px-4 py-2 text-gray-800">Date</th>
                     <th class="px-4 py-2 text-gray-800">Type</th>
@@ -149,7 +149,7 @@
                 >
                 <input
                   type="password"
-                  id="pin"
+                  id="account-pin"
                   placeholder="Pin"
                   name="password"
                   class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#EE6043] focus:border-[#EE6043] sm:text-sm"
