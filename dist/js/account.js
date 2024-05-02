@@ -138,9 +138,6 @@ const getTransactionDetails = async function (transcationId) {
 
     return { amount, type, toAccount, createdAt };
   } else {
-    // accountNumber = data["data"][0].accountNumber;
-    // balance = data["data"][0].balance;
-    // transactions = data["data"][0].transactions;
   }
 };
 
@@ -253,7 +250,6 @@ recognition.onresult = (e) => {
       } else if (action === "withdraw") {
         debouncedCreateWithdrawal();
       } else if (action === "transfer") {
-        console.log("transfer");
         debouncedCreateTransfer();
       }
     }
@@ -480,9 +476,7 @@ const createTransfer = async function () {
   try {
     const data = await response.json();
 
-    console.log(data);
     if (data.success) {
-      console.log("Tranfer Successful");
       closeTransferModal();
     }
   } catch (error) {}

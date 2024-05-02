@@ -94,6 +94,7 @@ recognition.onresult = (e) => {
       fullName = writeName(e.results[i][0].transcript);
     } // Input username
     else if (e.results[i][0].transcript.trim().includes("user")) {
+      console.log("User was said");
       transcript = [];
       username = writeUsername(e.results[i][0].transcript).trim();
     } // Input email
