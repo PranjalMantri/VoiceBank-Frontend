@@ -93,12 +93,12 @@ const updateUserDetails = async function () {
       typeCell.textContent = type;
 
       const amountCell = document.createElement("td");
-      if (type === "Withdrawl") {
-        amountCell.classList.add("border", "px-4", "py-2", "text-red-600");
-        amountCell.textContent = `-₹${amount}`;
-      } else {
+      if (type === "Deposit") {
         amountCell.classList.add("border", "px-4", "py-2", "text-green-600");
         amountCell.textContent = `₹${amount}`;
+      } else {
+        amountCell.classList.add("border", "px-4", "py-2", "text-red-600");
+        amountCell.textContent = `-₹${amount}`;
       }
 
       // Append cells to the row
@@ -130,7 +130,6 @@ const getTransactionDetails = async function (transcationId) {
   );
 
   const data = await response.json();
-  console.log(data);
   if (data.success) {
     const amount = data["data"].amount;
     const type = data["data"].type;
@@ -235,11 +234,10 @@ recognition.onresult = (e) => {
       } else if (action === "transfer") {
         transactionPin = writeTransferPin(e.results[i][0].transcript);
       }
-    } else if (e.results[i][0].transcript.trim().includes("transfer account")) {
+    } else if (e.results[i][0].transcript.trim().includes("receiver")) {
       transcript = [];
       transferAccount = writeTransferAccount(e.results[i][0].transcript);
     } else if (e.results[i][0].transcript.trim().includes("close")) {
-      console.log("Close was said");
       transcript = [];
       closeAccountModal();
       closeDepositModal();
@@ -251,13 +249,12 @@ recognition.onresult = (e) => {
       if (action === "account") {
         debouncedCreateAccount();
       } else if (action === "deposit") {
-        console.log("deposit");
         debouncedCreateDeposit();
       } else if (action === "withdraw") {
-        console.log("withdraw");
         debouncedCreateWithdrawal();
       } else if (action === "transfer") {
         console.log("transfer");
+        debouncedCreateTransfer();
       }
     }
     transcript.push(e.results[i][0].transcript);
@@ -307,6 +304,14 @@ const writeWithdrawPin = function (inputPin) {
   return pinValue;
 };
 
+const writeTransferPin = function (inputPin) {
+  const pin = document.querySelector("#transfer-pin");
+  const pinValue = inputPin.trim().replaceAll(" ", "").replaceAll("pin", "");
+  transcript = [];
+  pin.value = pinValue;
+  return pinValue;
+};
+
 const writeAmount = function (inputAmount) {
   const amount = document.querySelector("#amount");
   const amountValue = inputAmount
@@ -343,13 +348,25 @@ const writeWithdrawAmount = function (inputAmount) {
   return amountValue;
 };
 
+const writeTransferAmount = function (inputAmount) {
+  const amount = document.querySelector("#transfer-amount");
+  const amountValue = inputAmount
+    .trim()
+    .toLowerCase()
+    .replaceAll(" ", "")
+    .replaceAll("amount", "");
+  amount.value = amountValue;
+  transcript = [];
+  return amountValue;
+};
+
 const writeTransferAccount = function (inputAccount) {
-  const account = document.querySelector("#trasnfer-to");
+  const account = document.querySelector("#transfer-to");
   const accountValue = inputAccount
     .trim()
     .toLowerCase()
     .replaceAll(" ", "")
-    .replaceAll("transfer account", "");
+    .replaceAll("receiver", "");
   account.value = accountValue;
   transcript = [];
   return accountValue;
@@ -379,9 +396,7 @@ const createAccount = async function () {
       transactions = data["data"].transactions;
       closeAccountModal();
     }
-  } catch (error) {
-    showErrorModal();
-  }
+  } catch (error) {}
   updateUserDetails();
 };
 
@@ -391,7 +406,6 @@ const createDeposit = async function () {
     pin: transactionPin,
   };
 
-  console.log(transaction);
   const response = await fetch(
     "http://localhost:8000/api/v1/transaction/deposit",
     {
@@ -407,14 +421,10 @@ const createDeposit = async function () {
   try {
     const data = await response.json();
 
-    console.log(data);
     if (data.success) {
-      console.log("Successfuly");
       closeDepositModal();
     }
-  } catch (error) {
-    showErrorModal();
-  }
+  } catch (error) {}
   updateUserDetails();
 };
 
@@ -424,7 +434,6 @@ const createWithdrawal = async function () {
     pin: transactionPin,
   };
 
-  console.log(transaction);
   const response = await fetch(
     "http://localhost:8000/api/v1/transaction/withdrawl",
     {
@@ -440,14 +449,43 @@ const createWithdrawal = async function () {
   try {
     const data = await response.json();
 
-    console.log(data);
     if (data.success) {
-      console.log("Successfuly");
       closeWithdrawModal();
     }
   } catch (error) {
     showErrorModal();
   }
+  updateUserDetails();
+};
+
+const createTransfer = async function () {
+  const transaction = {
+    amount,
+    pin: transactionPin,
+    toAccount: transferAccount,
+  };
+
+  const response = await fetch(
+    "http://localhost:8000/api/v1/transaction/transfer",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(transaction),
+      credentials: "include",
+    }
+  );
+
+  try {
+    const data = await response.json();
+
+    console.log(data);
+    if (data.success) {
+      console.log("Tranfer Successful");
+      closeTransferModal();
+    }
+  } catch (error) {}
   updateUserDetails();
 };
 
@@ -465,6 +503,7 @@ function debounce(func, delay) {
 const debouncedCreateAccount = debounce(createAccount, 2000);
 const debouncedCreateDeposit = debounce(createDeposit, 2000);
 const debouncedCreateWithdrawal = debounce(createWithdrawal, 2000);
+const debouncedCreateTransfer = debounce(createTransfer, 2000);
 const debouncedGetTransactionDetails = debounce(getTransactionDetails, 1000);
 
 window.onload = async function () {
