@@ -1,13 +1,14 @@
 "use-strict";
 
-const experienceNowButton = document.querySelector("#experience-now--button");
+const learnMoreButton = document.querySelector("#learn-now--button");
 const registerModal = document.querySelector("#register-modal");
 const registerButton = document.querySelector("#register");
 const loginModal = document.querySelector("#login-modal");
 const loginButton = document.querySelector("#login");
 const startTalking = document.querySelector("#start-talking");
-const closeModalButton = document.querySelector("#close-modal");
+const closeModalButton = document.querySelectorAll("#close-modal");
 const errorModal = document.querySelector("#error-modal");
+const learnMoreModal = document.querySelector("#learn-more-modal");
 
 const speechRecognition =
   window.speechRecognition || window.webkitSpeechRecognition;
@@ -45,15 +46,28 @@ function closeLoginModal() {
   loginModal.classList.add("hidden");
 }
 
-closeModalButton.addEventListener("click", closeRegisterModal);
+function openLearnMoreModal() {
+  learnMoreModal.classList.remove("hidden");
+}
+
+function closeLearnMoreModal() {
+  learnMoreModal.classList.add("hidden");
+}
+
+learnMoreButton.addEventListener("click", openLearnMoreModal);
+
+closeModalButton.forEach((modal) => {
+  modal.addEventListener("click", function () {
+    closeRegisterModal();
+    closeLearnMoreModal();
+  });
+});
 
 document.addEventListener("keydown", function (e) {
   if (e.key === "Escape") {
     closeRegisterModal();
   }
 });
-
-experienceNowButton.addEventListener("click", showRegisterModal);
 
 startTalking.addEventListener("click", function () {
   recognition.start();
@@ -70,51 +84,54 @@ let action = "register";
 recognition.onresult = (e) => {
   for (let i = 0; i < e.results.length; i++) {
     transcript.push(e.results[i][0].transcript);
+    // e.results[i][0].transcript.includes("register");
+
+    const transcriptText = e.results[i][0].transcript.trim();
     // register
-    if (e.results[i][0].transcript.includes("register")) {
+    if (transcriptText.includes("register")) {
       transcript = [];
       showRegisterModal();
     } // login
-    else if (e.results[i][0].transcript.includes("login")) {
+    else if (transcriptText.includes("login")) {
       action = "login";
       transcript = [];
       showLoginModal();
-    } else if (e.results[i][0].transcript.includes("experience now")) {
+    } else if (transcriptText.includes("learn more")) {
       transcript = [];
-      showRegisterModal();
-    } else if (e.results[i][0].transcript.trim().includes("close")) {
+      openLearnMoreModal();
+    } else if (transcriptText.trim().includes("close")) {
       transcript = [];
       closeRegisterModal();
       closeLoginModal();
       closeErrorModal();
+      closeLearnMoreModal();
     }
     // Input Name
-    else if (e.results[i][0].transcript.trim().includes("name")) {
+    else if (transcriptText.trim().includes("name")) {
       transcript = [];
-      fullName = writeName(e.results[i][0].transcript);
+      fullName = writeName(transcriptText);
     } // Input username
-    else if (e.results[i][0].transcript.trim().includes("user")) {
-      console.log("User was said");
+    else if (transcriptText.includes("user")) {
       transcript = [];
-      username = writeUsername(e.results[i][0].transcript).trim();
+      username = writeUsername(transcriptText);
     } // Input email
-    else if (e.results[i][0].transcript.trim().includes("email")) {
+    else if (transcriptText.includes("email")) {
       transcript = [];
       if (action === "login") {
-        email = writeLoginEmail(e.results[i][0].transcript);
+        email = writeLoginEmail(transcriptText);
       } else {
-        email = writeEmail(e.results[i][0].transcript);
+        email = writeEmail(transcriptText);
       }
     } // Input password
-    else if (e.results[i][0].transcript.trim().includes("password")) {
+    else if (transcriptText.includes("password")) {
       transcript = [];
       if (action === "login") {
-        password = writeLoginPassword(e.results[i][0].transcript);
+        password = writeLoginPassword(transcriptText);
       } else {
-        password = writePassword(e.results[i][0].transcript).trim();
+        password = writePassword(transcriptText);
       }
     } // Register User
-    else if (e.results[i][0].transcript.trim().includes("submit")) {
+    else if (transcriptText.includes("submit")) {
       transcript = [];
       if (action === "register") {
         debouncedRegisterUser();
@@ -125,7 +142,7 @@ recognition.onresult = (e) => {
       transcript = [];
     }
 
-    transcript.push(e.results[i][0].transcript);
+    transcript.push(transcriptText);
   }
 };
 
@@ -225,7 +242,7 @@ const registerUser = async function () {
     const data = await response.json();
     if (data.success) {
       closeRegisterModal();
-      debouncedLoginUser(loginUser, 1500);
+      debouncedLoginUser(loginUser, 1000);
     }
   } catch (error) {
     closeLoginModal();
@@ -259,5 +276,15 @@ const loginUser = async function () {
   } catch (error) {}
 };
 
-const debouncedLoginUser = debounce(loginUser, 2000);
-const debouncedRegisterUser = debounce(registerUser, 2000);
+const debouncedLoginUser = debounce(loginUser, 1000);
+const debouncedRegisterUser = debounce(registerUser, 1000);
+
+document.querySelector("#nav-items").addEventListener("click", function (e) {
+  e.preventDefault();
+  const target = e.target;
+
+  if (target.classList.contains("link")) {
+    const id = target.getAttribute("href");
+    document.querySelector(id).scrollIntoView({ behavior: "smooth" });
+  }
+});

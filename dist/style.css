@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
 
 /*
-! tailwindcss v3.4.3 | MIT License | https://tailwindcss.com
+! tailwindcss v3.4.4 | MIT License | https://tailwindcss.com
 */
 
 /*
@@ -637,12 +637,20 @@ video {
   margin-bottom: 1rem;
 }
 
+.mb-6{
+  margin-bottom: 1.5rem;
+}
+
 .mb-8{
   margin-bottom: 2rem;
 }
 
 .ml-3{
   margin-left: 0.75rem;
+}
+
+.mr-16{
+  margin-right: 4rem;
 }
 
 .mr-2{
@@ -737,6 +745,26 @@ video {
   height: 100vh;
 }
 
+.max-h-11{
+  max-height: 2.75rem;
+}
+
+.max-h-\[70\%\]{
+  max-height: 70%;
+}
+
+.max-h-\[80\%\]{
+  max-height: 80%;
+}
+
+.max-h-\[90\%\]{
+  max-height: 90%;
+}
+
+.max-h-\[100\%\]{
+  max-height: 100%;
+}
+
 .min-h-screen{
   min-height: 100vh;
 }
@@ -785,12 +813,28 @@ video {
   width: 100%;
 }
 
+.w-\[75\%\]{
+  width: 75%;
+}
+
+.max-w-2xl{
+  max-width: 42rem;
+}
+
 .max-w-sm{
   max-width: 24rem;
 }
 
+.max-w-xl{
+  max-width: 36rem;
+}
+
 .table-auto{
   table-layout: auto;
+}
+
+.cursor-pointer{
+  cursor: pointer;
 }
 
 .grid-cols-2{
@@ -829,6 +873,12 @@ video {
   --tw-space-x-reverse: 0;
   margin-right: calc(0.5rem * var(--tw-space-x-reverse));
   margin-left: calc(0.5rem * calc(1 - var(--tw-space-x-reverse)));
+}
+
+.space-y-4 > :not([hidden]) ~ :not([hidden]){
+  --tw-space-y-reverse: 0;
+  margin-top: calc(1rem * calc(1 - var(--tw-space-y-reverse)));
+  margin-bottom: calc(1rem * var(--tw-space-y-reverse));
 }
 
 .text-wrap{

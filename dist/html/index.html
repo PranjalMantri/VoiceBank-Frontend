@@ -3,26 +3,32 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="../style.css" class="css" />
+    <link rel="stylesheet" href="../style.css" />
     <title>VoiceBank - Revolutionizing banking with your voice</title>
   </head>
   <body class="h-screen">
     <!-- navigation bar starts here  -->
-    <nav class="flex justify-between shadow-md">
+    <nav class="flex justify-between shadow-lg">
       <div
         class="font-Montserrat text-3xl font-bold px-10 py-10 text-[#212121] ml-3"
       >
         VoiceBank
       </div>
       <div>
-        <ul class="flex">
-          <li class="px-4 py-10 text-lg text-[#212121]">Services</li>
-          <li class="px-4 py-10 text-lg text-[#212121]">About</li>
-          <li class="px-4 py-10 text-lg text-[#212121]">How it works</li>
-          <li class="px-6 mr-3 py-7 text-lg text-[#212121]">
+        <ul class="flex" id="nav-items">
+          <li class="px-4 py-10 text-lg text-[#212121] cursor-pointer">
+            <a class="link" href="#services">Services</a>
+          </li>
+          <li class="px-4 py-10 text-lg text-[#212121] cursor-pointer">
+            <a class="link" href="#about">About</a>
+          </li>
+          <li class="px-4 py-10 text-lg text-[#212121] cursor-pointer">
+            <a class="link" href="#use">How to Use!</a>
+          </li>
+          <li class="px-6 mr-3 py-7 text-lg text-[#212121] cursor-pointer">
             <button
               id="start-talking"
-              class="text-white bg-[#EE6043] rounded-xl px-7 p-3"
+              class="text-white bg-[#EE6043] rounded-xl px-7 p-3 cursor-pointer"
             >
               Let's Talk
             </button>
@@ -46,7 +52,7 @@
                 class="font-Montserrat px-10 text- text-balance text-center text-[#212121]"
               >
                 Welcome to VoiceBank, the innovative financial services company
-                that brings you banking experience to the next level. Our
+                that brings your banking experience to the next level. Our
                 cutting edge voice-activated bank technology ensures that every
                 interaction is seamless and secure. With our intuitive platform,
                 you can easily manage your accounts and a range of financial
@@ -57,14 +63,18 @@
                 <button
                   class="mt-7 px-10 text-white bg-[#EE6043] rounded-xl py-3"
                   type="button"
-                  id="experience-now--button"
+                  id="learn-now--button"
                 >
-                  Experience now
+                  Learn More
                 </button>
               </div>
             </div>
             <div class="w-[50%]">
-              <img class="rounded-lg" src="../../assets/image2.webp" alt="" />
+              <img
+                class="rounded-lg"
+                src="../../assets/Images/image2.webp"
+                alt=""
+              />
             </div>
           </div>
         </div>
@@ -111,6 +121,7 @@
                   type="text"
                   id="fullname"
                   placeholder="Fullname"
+                  autocomplete="given-name"
                   name="fullname"
                   class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#EE6043] focus:border-[#EE6043] sm:text-sm"
                   required
@@ -126,6 +137,7 @@
                   type="text"
                   id="username"
                   placeholder="Username"
+                  autocomplete="username"
                   name="username"
                   class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#EE6043] focus:border-[#EE6043] sm:text-sm"
                   required
@@ -141,6 +153,7 @@
                   type="email"
                   id="email"
                   placeholder="Email"
+                  autocomplete="email"
                   name="email"
                   class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#EE6043] focus:border-[#EE6043] sm:text-sm"
                   required
@@ -156,6 +169,7 @@
                   type="password"
                   id="password"
                   placeholder="Password"
+                  autocomplete="current-password"
                   name="password"
                   class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#EE6043] focus:border-[#EE6043] sm:text-sm"
                   required
@@ -187,6 +201,92 @@
       </div>
     </div>
 
+    <div id="learn-more-modal" class="hidden">
+      <div class="flex justify-center">
+        <div
+          class="w-[100%] fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center backdrop-blur-sm"
+        >
+          <div
+            class="bg-white p-8 rounded shadow-lg w-[75%] max-w-2xl max-h-[80%] text-[#212121] border border-gray-300 relative"
+          >
+            <button
+              id="close-modal"
+              class="absolute top-0 right-0 mt-4 mr-4 text-gray-600 hover:text-gray-800 focus:outline-none"
+            >
+              <svg
+                class="h-6 w-6"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+            <div class="absolute top-0 right-0 mt-4 mr-16">
+              <svg
+                class="h-6 w-6"
+                xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                viewBox="0 0 1200 1200"
+                enable-background="new 0 0 1200 1200"
+                xml:space="preserve"
+              >
+                <path
+                  id="path21920"
+                  d="M0,350.411h282.787L708.197,3.688v1192.623l-425.41-346.721H0V350.411z M868.033,293.853c83.605,83.607,126.229,185.246,127.868,304.918c0,114.755-42.623,213.114-127.868,295.082l-86.066-88.523c59.018-59.018,88.525-128.688,88.525-209.018c0-81.967-29.509-153.277-88.525-213.934L868.033,293.853L868.033,293.853z M1015.574,148.771C1138.524,271.722,1200,420.083,1200,593.853c0,173.771-61.476,322.951-184.426,447.541l-90.984-90.982c98.361-96.722,147.541-215.164,147.541-355.327c0-140.164-49.18-259.427-147.541-357.788L1015.574,148.771z"
+                  fill="gray"
+                />
+              </svg>
+            </div>
+
+            <h1 class="text-3xl font-bold mb-6 text-[#EE6043] text-center">
+              How VoiceBank Works
+            </h1>
+            <div class="space-y-4">
+              <h3 class="text-2xl font-bold text-[#212121]">
+                Welcome to VoiceBank - Your Voice-Powered Banking Buddy
+              </h3>
+              <p class="text-lg">
+                VoiceBank is here to make your banking experience easier and
+                more fun through the magic of voice commands. To get started,
+                just click on the "Let's Talk" button, and you'll be ready to
+                talk with your bank!
+              </p>
+              <h4 class="text-xl font-bold text-[#212121]">Getting Around</h4>
+              <p class="text-lg">
+                Want to quickly jump to different parts of the website? Just say
+                the name of the section you see at the top of the page. For
+                example, say "Services" or "About," and you'll be whisked away
+                to that spot in a jiffy!
+              </p>
+              <h4 class="text-xl font-bold text-[#212121]">
+                Signing Up or Logging In
+              </h4>
+              <p class="text-lg">
+                Ready to create a new account or access your existing one? It's
+                as easy as saying "Register" or "Login." A window will pop up to
+                help you breeze through the process. To fill in your info, just
+                say the name of the field followed by what you want to type. For
+                instance, say "Email, example@email.com," and like magic, the
+                words you spoke will appear in the email field.
+              </p>
+              <p class="text-lg">
+                As you explore VoiceBank, you'll find even more voice commands
+                that make banking a piece of cake. Don't be shy, try out
+                different commands and see what works best for you!
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div id="login-modal" class="hidden">
       <div class="flex justify-center">
         <div
@@ -201,7 +301,7 @@
             >
               <svg
                 class="h-6 w-6"
-                xmlns="http://www.w3.org/2000/svg"
+                xmlns="http://www.w3.org/2070707/svg"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -226,6 +326,7 @@
                   type="email"
                   id="login-email"
                   placeholder="Email"
+                  autocomplete="email"
                   name="email"
                   class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#EE6043] focus:border-[#EE6043] sm:text-sm"
                   required
@@ -241,6 +342,7 @@
                   type="password"
                   id="login-password"
                   placeholder="Password"
+                  autocomplete="current-password"
                   name="password"
                   class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#EE6043] focus:border-[#EE6043] sm:text-sm"
                   required
@@ -307,7 +409,7 @@
     </div>
 
     <!-- Services we provide section starts here  -->
-    <article class="flex flex-col items-center px-5">
+    <article class="flex flex-col items-center px-5" id="services">
       <div class="mt-14 mx-[15%] w-[70%]">
         <p
           class="text-[#212121] font-Montserrat font-bold text-3xl tracking-wide"
@@ -373,8 +475,7 @@
     <!-- Services we provide section ends here  -->
 
     <!-- More about product section start here  -->
-
-    <div class="mt-20 mx-[15%] w-[70%] bg-[#EE6043]/[0.09]">
+    <div class="mt-20 mx-[15%] w-[70%] bg-[#EE6043]/[0.09]" id="about">
       <div class="flex justify-center items-center">
         <div class="w-[40%] p-5">
           <p
@@ -433,7 +534,11 @@
           </div>
         </div>
         <div class="w-[40%] p-5">
-          <img class="rounded-xl" src="../../assets/image1.webp" alt="" />
+          <img
+            class="rounded-xl"
+            src="../../assets/Images/image1.webp"
+            alt=""
+          />
         </div>
       </div>
     </div>
@@ -497,19 +602,23 @@
           </div>
         </div>
         <div class="w-[40%] p-5">
-          <img class="rounded-xl" src="../../assets/image3.webp" alt="" />
+          <img
+            class="rounded-xl"
+            src="../../assets/Images/image3.webp"
+            alt=""
+          />
         </div>
       </div>
     </div>
     <!-- More about product section ends here  -->
 
     <!-- How it works section starts here -->
-    <article class="flex flex-row items-center px-5">
+    <article class="flex flex-row items-center px-5" id="use">
       <div class="mt-14 mx-[15%] w-[70%]">
         <p
           class="text-[#212121] font-Montserrat font-bold text-3xl tracking-wide"
         >
-          How it works
+          How to use!
         </p>
 
         <div class="flex flex-wrap justify-center">
