@@ -9,13 +9,17 @@ const startTalking = document.querySelector("#start-talking");
 const closeModalButton = document.querySelectorAll("#close-modal");
 const errorModal = document.querySelector("#error-modal");
 const learnMoreModal = document.querySelector("#learn-more-modal");
+const services = document.querySelector("#services");
+const about = document.querySelector("#about");
+const use = document.querySelector("#use");
+const home = document.querySelector("#nav");
 
 const speechRecognition =
   window.speechRecognition || window.webkitSpeechRecognition;
 
 const recognition = new speechRecognition();
 recognition.lang = "en";
-recognition.interimResults = true;
+recognition.interimResults = false;
 recognition.continuous = true;
 
 function showRegisterModal() {
@@ -87,6 +91,7 @@ recognition.onresult = (e) => {
     // e.results[i][0].transcript.includes("register");
 
     const transcriptText = e.results[i][0].transcript.trim();
+
     // register
     if (transcriptText.includes("register")) {
       transcript = [];
@@ -99,14 +104,25 @@ recognition.onresult = (e) => {
     } else if (transcriptText.includes("learn more")) {
       transcript = [];
       openLearnMoreModal();
+    } else if (transcriptText.includes("home")) {
+      transcript = [];
+      scrollToHome();
+    } else if (transcriptText.includes("services")) {
+      transcript = [];
+      scrollToServices();
+    } else if (transcriptText.includes("about")) {
+      transcript = [];
+      scrollToAbout();
+    } else if (transcriptText.includes("how to use")) {
+      transcript = [];
+      scrollToUsage();
     } else if (transcriptText.trim().includes("close")) {
       transcript = [];
       closeRegisterModal();
       closeLoginModal();
       closeErrorModal();
       closeLearnMoreModal();
-    }
-    // Input Name
+    } // Input Name
     else if (transcriptText.trim().includes("name")) {
       transcript = [];
       fullName = writeName(transcriptText);
@@ -134,28 +150,17 @@ recognition.onresult = (e) => {
     else if (transcriptText.includes("submit")) {
       transcript = [];
       if (action === "register") {
-        debouncedRegisterUser();
+        registerUser();
+        // debouncedRegisterUser();
       } else if (action === "login") {
-        debouncedLoginUser();
+        loginUser();
+        // debouncedLoginUser();
       }
     } else {
       transcript = [];
     }
-
-    transcript.push(transcriptText);
   }
 };
-
-function debounce(func, delay) {
-  let timeoutId;
-
-  return function (...args) {
-    clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => {
-      func.apply(this, args);
-    }, delay);
-  };
-}
 
 const writeName = function (name) {
   const fullName = document.querySelector("#fullname");
@@ -242,7 +247,7 @@ const registerUser = async function () {
     const data = await response.json();
     if (data.success) {
       closeRegisterModal();
-      debouncedLoginUser(loginUser, 1000);
+      loginUser();
     }
   } catch (error) {
     closeLoginModal();
@@ -276,15 +281,18 @@ const loginUser = async function () {
   } catch (error) {}
 };
 
-const debouncedLoginUser = debounce(loginUser, 1000);
-const debouncedRegisterUser = debounce(registerUser, 1000);
+const scrollToServices = function () {
+  services.scrollIntoView({ behavior: "smooth" });
+};
 
-document.querySelector("#nav-items").addEventListener("click", function (e) {
-  e.preventDefault();
-  const target = e.target;
+const scrollToAbout = function () {
+  about.scrollIntoView({ behavior: "smooth" });
+};
 
-  if (target.classList.contains("link")) {
-    const id = target.getAttribute("href");
-    document.querySelector(id).scrollIntoView({ behavior: "smooth" });
-  }
-});
+const scrollToUsage = function () {
+  use.scrollIntoView({ behavior: "smooth" });
+};
+
+const scrollToHome = function () {
+  home.scrollIntoView({ behavior: "smooth" });
+};
