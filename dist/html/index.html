@@ -207,7 +207,7 @@
           class="w-[100%] fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center backdrop-blur-sm"
         >
           <div
-            class="bg-white p-8 rounded shadow-lg w-[75%] max-w-2xl max-h-[80%] text-[#212121] border border-gray-300 relative"
+            class="bg-white p-6 rounded shadow-lg w-[75%] max-w-2xl max-h-[85%] text-[#212121] border border-gray-300 relative"
           >
             <button
               id="close-modal"
@@ -228,7 +228,10 @@
                 />
               </svg>
             </button>
-            <div class="absolute top-0 right-0 mt-4 mr-16">
+            <button
+              id="play-audio"
+              class="absolute top-0 right-0 mt-4 mr-16 text-gray-600 hover:text-gray-800 focus:outline-none"
+            >
               <svg
                 class="h-6 w-6"
                 xmlns="http://www.w3.org/2000/svg"
@@ -243,39 +246,46 @@
                   fill="gray"
                 />
               </svg>
-            </div>
+            </button>
 
             <h1 class="text-3xl font-bold mb-6 text-[#EE6043] text-center">
               How VoiceBank Works
             </h1>
             <div class="space-y-4">
-              <h3 class="text-2xl font-bold text-[#212121]">
-                Welcome to VoiceBank - Your Voice-Powered Banking Buddy
-              </h3>
-              <p class="text-lg">
-                VoiceBank is here to make your banking experience easier and
-                more fun through the magic of voice commands. To get started,
-                just click on the "Let's Talk" button, and you'll be ready to
-                talk with your bank!
-              </p>
-              <h4 class="text-xl font-bold text-[#212121]">Getting Around</h4>
-              <p class="text-lg">
-                Want to quickly jump to different parts of the website? Just say
-                the name of the section you see at the top of the page. For
-                example, say "Services" or "About," and you'll be whisked away
-                to that spot in a jiffy!
-              </p>
-              <h4 class="text-xl font-bold text-[#212121]">
-                Signing Up or Logging In
-              </h4>
-              <p class="text-lg">
-                Ready to create a new account or access your existing one? It's
-                as easy as saying "Register" or "Login." A window will pop up to
-                help you breeze through the process. To fill in your info, just
-                say the name of the field followed by what you want to type. For
-                instance, say "Email, example@email.com," and like magic, the
-                words you spoke will appear in the email field.
-              </p>
+              <div>
+                <h3 class="text-2xl font-bold text-[#212121]">
+                  Welcome to VoiceBank - Your Voice-Powered Banking Buddy
+                </h3>
+                <p class="text-lg">
+                  VoiceBank is here to make your banking experience easier and
+                  more fun through the magic of voice commands. To get started,
+                  just click on the "Let's Talk" button, and you'll be ready to
+                  talk with your bank!
+                </p>
+              </div>
+              <div>
+                <h4 class="text-xl font-bold text-[#212121]">Getting Around</h4>
+                <p class="text-lg">
+                  Want to quickly jump to different parts of the website? Just
+                  say the name of the section you see at the top of the page.
+                  For example, say "Services" or "About," and you'll be whisked
+                  away to that spot in a jiffy!
+                </p>
+              </div>
+              <div>
+                <h4 class="text-xl font-bold text-[#212121]">
+                  Signing Up or Logging In
+                </h4>
+                <p class="text-lg">
+                  Ready to create a new account or access your existing one?
+                  It's as easy as saying "Register" or "Login." A window will
+                  pop up to help you breeze through the process. To fill in your
+                  info, just say the name of the field followed by what you want
+                  to type. For instance, say "Email, example@email.com," and
+                  like magic, the words you spoke will appear in the email
+                  field.
+                </p>
+              </div>
               <p class="text-lg">
                 As you explore VoiceBank, you'll find even more voice commands
                 that make banking a piece of cake. Don't be shy, try out

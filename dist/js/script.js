@@ -13,6 +13,8 @@ const services = document.querySelector("#services");
 const about = document.querySelector("#about");
 const use = document.querySelector("#use");
 const home = document.querySelector("#nav");
+const playAudioButton = document.querySelector("#play-audio");
+const audio = new Audio("../../assets/Audio/learn more.mp3");
 
 const speechRecognition =
   window.speechRecognition || window.webkitSpeechRecognition;
@@ -56,6 +58,20 @@ function openLearnMoreModal() {
 
 function closeLearnMoreModal() {
   learnMoreModal.classList.add("hidden");
+  stopAudio();
+}
+
+function playAudio() {
+  audio.play();
+}
+
+function pauseAudio() {
+  audio.pause();
+}
+
+function stopAudio() {
+  audio.pause();
+  audio.currentTime = 0;
 }
 
 learnMoreButton.addEventListener("click", openLearnMoreModal);
@@ -81,6 +97,10 @@ registerModal.addEventListener("submit", function (e) {
   e.preventDefault();
 });
 
+playAudioButton.addEventListener("click", function () {
+  audio.play();
+});
+
 let transcript = Array();
 let fullName, username, email, password;
 let action = "register";
@@ -88,50 +108,58 @@ let action = "register";
 recognition.onresult = (e) => {
   for (let i = 0; i < e.results.length; i++) {
     transcript.push(e.results[i][0].transcript);
-    // e.results[i][0].transcript.includes("register");
 
     const transcriptText = e.results[i][0].transcript.trim();
 
     // register
-    if (transcriptText.includes("register")) {
+    if (transcriptText.toLowerCase().includes("register")) {
       transcript = [];
       showRegisterModal();
     } // login
-    else if (transcriptText.includes("login")) {
+    else if (transcriptText.toLowerCase().includes("login")) {
       action = "login";
       transcript = [];
       showLoginModal();
-    } else if (transcriptText.includes("learn more")) {
+    } else if (transcriptText.toLowerCase().includes("learn more")) {
       transcript = [];
       openLearnMoreModal();
-    } else if (transcriptText.includes("home")) {
+    } else if (transcriptText.toLowerCase().includes("home")) {
       transcript = [];
       scrollToHome();
-    } else if (transcriptText.includes("services")) {
+    } else if (transcriptText.toLowerCase().includes("services")) {
       transcript = [];
       scrollToServices();
-    } else if (transcriptText.includes("about")) {
+    } else if (transcriptText.toLowerCase().includes("about")) {
       transcript = [];
       scrollToAbout();
-    } else if (transcriptText.includes("how to use")) {
+    } else if (transcriptText.toLowerCase().includes("how to use")) {
       transcript = [];
       scrollToUsage();
-    } else if (transcriptText.trim().includes("close")) {
+    } else if (transcriptText.toLowerCase().includes("play")) {
+      transcript = [];
+      playAudio();
+    } else if (transcriptText.toLowerCase().includes("pause")) {
+      transcript = [];
+      pauseAudio();
+    } else if (transcriptText.toLowerCase().includes("stop")) {
+      transcript = [];
+      stopAudio();
+    } else if (transcriptText.toLowerCase().trim().includes("close")) {
       transcript = [];
       closeRegisterModal();
       closeLoginModal();
       closeErrorModal();
       closeLearnMoreModal();
     } // Input Name
-    else if (transcriptText.trim().includes("name")) {
+    else if (transcriptText.toLowerCase().includes("name")) {
       transcript = [];
       fullName = writeName(transcriptText);
     } // Input username
-    else if (transcriptText.includes("user")) {
+    else if (transcriptText.toLowerCase().includes("user")) {
       transcript = [];
       username = writeUsername(transcriptText);
     } // Input email
-    else if (transcriptText.includes("email")) {
+    else if (transcriptText.toLowerCase().includes("email")) {
       transcript = [];
       if (action === "login") {
         email = writeLoginEmail(transcriptText);
@@ -139,7 +167,7 @@ recognition.onresult = (e) => {
         email = writeEmail(transcriptText);
       }
     } // Input password
-    else if (transcriptText.includes("password")) {
+    else if (transcriptText.toLowerCase().includes("password")) {
       transcript = [];
       if (action === "login") {
         password = writeLoginPassword(transcriptText);
@@ -147,7 +175,7 @@ recognition.onresult = (e) => {
         password = writePassword(transcriptText);
       }
     } // Register User
-    else if (transcriptText.includes("submit")) {
+    else if (transcriptText.toLowerCase().includes("submit")) {
       transcript = [];
       if (action === "register") {
         registerUser();
