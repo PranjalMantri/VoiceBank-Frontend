@@ -106,90 +106,58 @@ let fullName, username, email, password;
 let action = "register";
 
 recognition.onresult = (e) => {
-  for (let i = 0; i < e.results.length; i++) {
-    transcript.push(e.results[i][0].transcript);
+  const transcriptText = e.results[e.resultIndex][0].transcript.trim();
 
-    const transcriptText = e.results[i][0].transcript.trim();
-
-    // register
-    if (transcriptText.toLowerCase().includes("register")) {
-      transcript = [];
-      showRegisterModal();
-    } // login
-    else if (transcriptText.toLowerCase().includes("login")) {
-      action = "login";
-      transcript = [];
-      showLoginModal();
-    } else if (transcriptText.toLowerCase().includes("learn more")) {
-      transcript = [];
-      openLearnMoreModal();
-    } else if (transcriptText.toLowerCase().includes("home")) {
-      transcript = [];
-      scrollToHome();
-    } else if (transcriptText.toLowerCase().includes("services")) {
-      transcript = [];
-      scrollToServices();
-    } else if (transcriptText.toLowerCase().includes("about")) {
-      transcript = [];
-      scrollToAbout();
-    } else if (transcriptText.toLowerCase().includes("how to use")) {
-      transcript = [];
-      scrollToUsage();
-    } else if (transcriptText.toLowerCase().includes("play")) {
-      transcript = [];
-      playAudio();
-    } else if (transcriptText.toLowerCase().includes("pause")) {
-      transcript = [];
-      pauseAudio();
-    } else if (transcriptText.toLowerCase().includes("stop")) {
-      transcript = [];
-      stopAudio();
-    } else if (transcriptText.toLowerCase().trim().includes("close")) {
-      transcript = [];
-      closeRegisterModal();
-      closeLoginModal();
-      closeErrorModal();
-      closeLearnMoreModal();
-    } // Input Name
-    else if (transcriptText.toLowerCase().includes("name")) {
-      transcript = [];
-      fullName = writeName(transcriptText);
-    } // Input username
-    else if (transcriptText.toLowerCase().includes("user")) {
-      transcript = [];
-      username = writeUsername(transcriptText);
-    } // Input email
-    else if (transcriptText.toLowerCase().includes("email")) {
-      transcript = [];
-      if (action === "login") {
-        email = writeLoginEmail(transcriptText);
-      } else {
-        email = writeEmail(transcriptText);
-      }
-    } // Input password
-    else if (transcriptText.toLowerCase().includes("password")) {
-      transcript = [];
-      if (action === "login") {
-        password = writeLoginPassword(transcriptText);
-      } else {
-        password = writePassword(transcriptText);
-      }
-    } // Register User
-    else if (transcriptText.toLowerCase().includes("submit")) {
-      transcript = [];
-      if (action === "register") {
-        registerUser();
-        // debouncedRegisterUser();
-      } else if (action === "login") {
-        loginUser();
-        // debouncedLoginUser();
-      }
+  if (transcriptText.includes("register")) {
+    showRegisterModal();
+  } else if (transcriptText.toLowerCase().includes("login")) {
+    action = "login";
+    showLoginModal();
+  } else if (transcriptText.toLowerCase().includes("learn more")) {
+    openLearnMoreModal();
+  } else if (transcriptText.toLowerCase().includes("home")) {
+    scrollToHome();
+  } else if (transcriptText.includes("services")) {
+    scrollToServices();
+  } else if (transcriptText.includes("about")) {
+    scrollToAbout();
+  } else if (transcriptText.toLowerCase().includes("how to use")) {
+    scrollToUsage();
+  } else if (transcriptText.toLowerCase().includes("play")) {
+    playAudio();
+  } else if (transcriptText.toLowerCase().includes("pause")) {
+    pauseAudio();
+  } else if (transcriptText.toLowerCase().includes("stop")) {
+    stopAudio();
+  } else if (transcriptText.toLowerCase().trim().includes("close")) {
+    closeRegisterModal();
+    closeLoginModal();
+    closeErrorModal();
+    closeLearnMoreModal();
+  } else if (transcriptText.toLowerCase().includes("name")) {
+    fullName = writeName(transcriptText);
+  } else if (transcriptText.toLowerCase().includes("user")) {
+    username = writeUsername(transcriptText);
+  } else if (transcriptText.toLowerCase().includes("email")) {
+    if (action === "login") {
+      email = writeLoginEmail(transcriptText);
     } else {
-      transcript = [];
+      email = writeEmail(transcriptText);
+    }
+  } else if (transcriptText.toLowerCase().includes("password")) {
+    if (action === "login") {
+      password = writeLoginPassword(transcriptText);
+    } else {
+      password = writePassword(transcriptText);
+    }
+  } else if (transcriptText.toLowerCase().includes("submit")) {
+    if (action === "register") {
+      registerUser();
+    } else if (action === "login") {
+      loginUser();
     }
   }
 };
-
 const writeName = function (name) {
   const fullName = document.querySelector("#fullname");
   const nameValue = name.trim().replace("name", "");
@@ -310,6 +278,7 @@ const loginUser = async function () {
 };
 
 const scrollToServices = function () {
+  console.log("Scrolling to services");
   services.scrollIntoView({ behavior: "smooth" });
 };
 

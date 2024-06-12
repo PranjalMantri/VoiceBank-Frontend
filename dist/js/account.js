@@ -5,12 +5,11 @@ const speechRecognition =
 
 const recognition = new speechRecognition();
 recognition.lang = "en";
-recognition.interimResults = true;
+recognition.interimResults = false;
 recognition.continuous = true;
 
-let transcript = Array();
 let accountType, pin;
-const userId = localStorage.getItem("userId").replaceAll(`"`, "");
+const userId = localStorage.getItem("userId").replaceAll('"', "");
 const accountModal = document.querySelector("#account-modal");
 const errorModal = document.querySelector("#error-modal");
 const depositModal = document.querySelector("#deposit-modal");
@@ -40,6 +39,8 @@ const findUserAccount = async function (userId) {
       transactions = data["data"][0].transactions;
     }
   }
+
+  return { accountNumber, balance, transactions };
 };
 
 const findUser = async function (userId) {
@@ -52,12 +53,11 @@ const findUser = async function (userId) {
   username = data["data"].username;
 };
 
-const getUserDetails = function () {
-  return { accountNumber, balance, username, transactions };
-};
-
 const updateUserDetails = async function () {
-  const { accountNumber, balance, username, transactions } = getUserDetails();
+  const { accountNumber, balance, username, transactions } =
+    await findUserAccount(userId);
+
+  console.log(transactions);
 
   if (transactions.length == 0) {
     const transactionTable = document.querySelector("#transaction-table");
@@ -189,71 +189,58 @@ const closeTransferModal = function () {
 };
 
 recognition.onresult = (e) => {
-  for (let i = 0; i < e.results.length; i++) {
-    transcript.push(e.results[i][0].transcript);
-    if (e.results[i][0].transcript.trim().includes("close")) {
-      transcript = [];
-      closeAccountModal();
+  const transcriptText = e.results[e.resultIndex][0].transcript.trim();
+
+  if (transcriptText.includes("close")) {
+    closeAccountModal();
+  } // Input Name
+  else if (transcriptText.includes("type")) {
+    accountType = writeAccountType(transcriptText);
+  } else if (transcriptText.includes("deposit")) {
+    action = "deposit";
+    showDepositModal();
+  } else if (transcriptText.includes("withdraw")) {
+    action = "withdraw";
+    showWithdrawModal();
+  } else if (transcriptText.includes("transfer")) {
+    action = "transfer";
+    showTransferModal();
+  } else if (transcriptText.includes("amount")) {
+    if (action === "deposit") {
+      amount = writeDepositAmount(transcriptText);
+    } else if (action === "withdraw") {
+      amount = writeWithdrawAmount(transcriptText);
+    } else if (action === "transfer") {
+      amount = writeTransferAmount(transcriptText);
     }
-    // Input Name
-    else if (e.results[i][0].transcript.trim().includes("type")) {
-      transcript = [];
-      accountType = writeAccountType(e.results[i][0].transcript);
-    } else if (e.results[i][0].transcript.trim().includes("deposit")) {
-      action = "deposit";
-      transcript = [];
-      showDepositModal();
-    } else if (e.results[i][0].transcript.trim().includes("withdraw")) {
-      action = "withdraw";
-      transcript = [];
-      showWithdrawModal();
-    } else if (e.results[i][0].transcript.trim().includes("transfer")) {
-      action = "transfer";
-      transcript = [];
-      showTransferModal();
-    } else if (e.results[i][0].transcript.trim().includes("amount")) {
-      transcript = [];
-      if (action === "deposit") {
-        amount = writeDepositAmount(e.results[i][0].transcript);
-      } else if (action === "withdraw") {
-        amount = writeWithdrawAmount(e.results[i][0].transcript);
-      } else if (action === "transfer") {
-        amount = writeTransferAmount(e.results[i][0].transcript);
-      }
-    } else if (e.results[i][0].transcript.trim().includes("pin")) {
-      transcript = [];
-      if (action === "account") {
-        transactionPin = writeAccountPin(e.results[i][0].transcript);
-      } else if (action === "deposit") {
-        transactionPin = writeDepositPin(e.results[i][0].transcript);
-      } else if (action === "withdraw") {
-        transactionPin = writeWithdrawPin(e.results[i][0].transcript);
-      } else if (action === "transfer") {
-        transactionPin = writeTransferPin(e.results[i][0].transcript);
-      }
-    } else if (e.results[i][0].transcript.trim().includes("receiver")) {
-      transcript = [];
-      transferAccount = writeTransferAccount(e.results[i][0].transcript);
-    } else if (e.results[i][0].transcript.trim().includes("close")) {
-      transcript = [];
-      closeAccountModal();
-      closeDepositModal();
-      closeErrorModal();
-      closeWithdrawModal();
-      closeTransferModal();
-    } else if (e.results[i][0].transcript.trim().includes("submit")) {
-      transcript = [];
-      if (action === "account") {
-        debouncedCreateAccount();
-      } else if (action === "deposit") {
-        debouncedCreateDeposit();
-      } else if (action === "withdraw") {
-        debouncedCreateWithdrawal();
-      } else if (action === "transfer") {
-        debouncedCreateTransfer();
-      }
+  } else if (transcriptText.includes("pin")) {
+    if (action === "account") {
+      transactionPin = writeAccountPin(transcriptText);
+    } else if (action === "deposit") {
+      transactionPin = writeDepositPin(transcriptText);
+    } else if (action === "withdraw") {
+      transactionPin = writeWithdrawPin(transcriptText);
+    } else if (action === "transfer") {
+      transactionPin = writeTransferPin(transcriptText);
     }
-    transcript.push(e.results[i][0].transcript);
+  } else if (transcriptText.includes("receiver")) {
+    transferAccount = writeTransferAccount(transcriptText);
+  } else if (transcriptText.includes("close")) {
+    closeAccountModal();
+    closeDepositModal();
+    closeErrorModal();
+    closeWithdrawModal();
+    closeTransferModal();
+  } else if (transcriptText.includes("submit")) {
+    if (action === "account") {
+      createAccount();
+    } else if (action === "deposit") {
+      createDeposit();
+    } else if (action === "withdraw") {
+      createWithdrawal();
+    } else if (action === "transfer") {
+      createTransfer();
+    }
   }
 };
 
@@ -279,7 +266,6 @@ const writeAccountType = function (inputAccountType) {
 const writeAccountPin = function (inputPin) {
   const pin = document.querySelector("#account-pin");
   const pinValue = inputPin.trim().replaceAll(" ", "").replaceAll("pin", "");
-  transcript = [];
   pin.value = pinValue;
   return pinValue;
 };
@@ -287,7 +273,6 @@ const writeAccountPin = function (inputPin) {
 const writeDepositPin = function (inputPin) {
   const pin = document.querySelector("#deposit-pin");
   const pinValue = inputPin.trim().replaceAll(" ", "").replaceAll("pin", "");
-  transcript = [];
   pin.value = pinValue;
   return pinValue;
 };
@@ -295,7 +280,6 @@ const writeDepositPin = function (inputPin) {
 const writeWithdrawPin = function (inputPin) {
   const pin = document.querySelector("#withdraw-pin");
   const pinValue = inputPin.trim().replaceAll(" ", "").replaceAll("pin", "");
-  transcript = [];
   pin.value = pinValue;
   return pinValue;
 };
@@ -303,7 +287,6 @@ const writeWithdrawPin = function (inputPin) {
 const writeTransferPin = function (inputPin) {
   const pin = document.querySelector("#transfer-pin");
   const pinValue = inputPin.trim().replaceAll(" ", "").replaceAll("pin", "");
-  transcript = [];
   pin.value = pinValue;
   return pinValue;
 };
@@ -316,7 +299,6 @@ const writeAmount = function (inputAmount) {
     .replaceAll(" ", "")
     .replaceAll("amount", "");
   amount.value = amountValue;
-  transcript = [];
   return amountValue;
 };
 
@@ -328,7 +310,6 @@ const writeDepositAmount = function (inputAmount) {
     .replaceAll(" ", "")
     .replaceAll("amount", "");
   amount.value = amountValue;
-  transcript = [];
   return amountValue;
 };
 
@@ -340,7 +321,6 @@ const writeWithdrawAmount = function (inputAmount) {
     .replaceAll(" ", "")
     .replaceAll("amount", "");
   amount.value = amountValue;
-  transcript = [];
   return amountValue;
 };
 
@@ -352,7 +332,6 @@ const writeTransferAmount = function (inputAmount) {
     .replaceAll(" ", "")
     .replaceAll("amount", "");
   amount.value = amountValue;
-  transcript = [];
   return amountValue;
 };
 
@@ -364,7 +343,6 @@ const writeTransferAccount = function (inputAccount) {
     .replaceAll(" ", "")
     .replaceAll("receiver", "");
   account.value = accountValue;
-  transcript = [];
   return accountValue;
 };
 
@@ -419,9 +397,10 @@ const createDeposit = async function () {
 
     if (data.success) {
       closeDepositModal();
+
+      updateUserDetails();
     }
   } catch (error) {}
-  updateUserDetails();
 };
 
 const createWithdrawal = async function () {
@@ -479,26 +458,11 @@ const createTransfer = async function () {
     if (data.success) {
       closeTransferModal();
     }
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+  }
   updateUserDetails();
 };
-
-function debounce(func, delay) {
-  let timeoutId;
-
-  return function (...args) {
-    clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => {
-      func.apply(this, args);
-    }, delay);
-  };
-}
-
-const debouncedCreateAccount = debounce(createAccount, 2000);
-const debouncedCreateDeposit = debounce(createDeposit, 2000);
-const debouncedCreateWithdrawal = debounce(createWithdrawal, 2000);
-const debouncedCreateTransfer = debounce(createTransfer, 2000);
-const debouncedGetTransactionDetails = debounce(getTransactionDetails, 1000);
 
 window.onload = async function () {
   recognition.start();
